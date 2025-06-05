@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SafetyLens - Monitoramento de EPIs{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3 style="text-align: center;">
+                    <img src="\static\img\logo-sem-fundo.png" class="text-primary me-2" style="width: 50px; height: auto; vertical-align: middle;">
+                    SafetyLens
+                  </h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="{% if active_page == 'dashboard' %}active{% endif %}">
+                    <a href="{{ url_for('index') }}">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </li>
+                <li class="{% if active_page == 'detections' %}active{% endif %}">
+                    <a href="{{ url_for('detections') }}">
+                        <i class="fas fa-history"></i> Histórico
+                    </a>
+                </li>
+                <li class="{% if active_page == 'analytics' %}active{% endif %}">
+                    <a href="{{ url_for('analytics') }}">
+                        <i class="fas fa-chart-line"></i> Análises
+                    </a>
+                </li>
+                <li class="{% if active_page == 'about' %}active{% endif %}">
+                    <a href="{{ url_for('about') }}">
+                        <i class="fas fa-info-circle"></i> Quem Somos
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <small class="text-muted">
+                    Atualizado em: {{ now.strftime('%d/%m/%Y às %H:%M:%S') }}
+                </small>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <span class="navbar-text ms-3">
+                        {% block page_title %}{% endblock %}
+                    </span>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <div class="container-fluid py-4">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.getElementById('sidebarCollapse').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('content').classList.toggle('active');
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

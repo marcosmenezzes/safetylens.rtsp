@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Detecções - SafetyLens{% endblock %}
+
+{% block page_title %}Histórico de Detecções{% endblock %}
+
+{% block content %}
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Data/Hora Inicial</label>
+                    <input type="datetime-local" name="start_time" class="form-control" value="{{ request.form.get('start_time', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Data/Hora Final</label>
+                    <input type="datetime-local" name="end_time" class="form-control" value="{{ request.form.get('end_time', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabela de Detecções -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-list me-2"></i>Lista de Detecções
+                </h5>
+                <div class="text-muted">
+                    Total: {{ total_detections }}
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data/Hora</th>
+                            <th>EPIs Ausentes</th>
+                            <th class="text-center">Imagem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in detections %}
+                        <tr class="fade-in">
+                            <td>{{ row[0] }}</td>
+                            <td>
+                                {% set date_parts = row[1].split(' ')[0].split('-') %}
+                                {{ date_parts[2] }}-{{ date_parts[1] }}-{{ date_parts[0] }}
+                                {{ row[1].split(' ')[1] }}
+                            </td>
+                            <td>{{ row[3] }}</td>
+                            <td class="text-center">
+                                {% if row[2] %}
+                                <a href="/image/{{row[0]}}" class="btn btn-sm btn-primary" target="_blank">
+                                    <i class="fas fa-image me-1"></i>Visualizar
+                                </a>
+                                {% else %}
+                                <span class="text-muted">
+                                    <i class="fas fa-ban"></i>
+                                </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginação -->
+            <nav aria-label="Navegação de páginas" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page-1 }}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in range(start_page, end_page + 1) %}
+                    <li class="page-item {% if num == page %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page+1 }}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ total_pages }}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
