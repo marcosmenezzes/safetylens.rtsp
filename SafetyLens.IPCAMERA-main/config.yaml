@@ -1,0 +1,32 @@
+alerts:
+  delay_time: 0
+  duration: 101
+  frequency: 1041
+camera:
+  default_settings:
+    brightness: 62
+    contrast: 16
+    grayscale: false
+    sharpness: 9
+  id: 0
+  resolution:
+    height: 1920
+    width: 1080
+  url: rtsp://admin:%40norte12@192.168.1.64
+  video_format: mp4
+detection:
+  classes:
+    epi_ausentes:
+    - 4
+    - 5
+    - 6
+    - 7
+    epi_presentes:
+    - 0
+    - 1
+    - 2
+    - 3
+  min_confidence: 0.5
+paths:
+  database: database/epi_detections.db
+  model: model/best.pt

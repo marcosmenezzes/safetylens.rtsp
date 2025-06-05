@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+
+{% block title %}Análises - SafetyLens{% endblock %}
+
+{% block page_title %}Análises e Relatórios{% endblock %}
+
+{% block content %}
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label">Data Inicial</label>
+                    <input type="datetime-local" name="start_time" class="form-control" value="{{ request.form.get('start_time', '') }}">
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Data Final</label>
+                    <input type="datetime-local" name="end_time" class="form-control" value="{{ request.form.get('end_time', '') }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-sync-alt me-2"></i>Atualizar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- RESUMO -->
+    <div class="row g-4 mb-4">
+        <!-- COR AMARELO -->
+        <div class="col-md-3">
+            <div class="stats-card card h-100" id="total-detections-card" style="background-color:rgb(255, 255, 255);">
+                <div class="icon" style="color: #ffc107;">
+                    <i class="fas fa-chart-bar" style="color: #ffc107 !important;"></i>
+                </div>
+                <div class="number" style="color:rgb(224, 169, 3);">{{ total_detections }}</div>
+                <div class="label text-muted" >
+                    {% if request.form.get('start_time') and request.form.get('end_time') %}
+                        Total de Violações ({{ request.form.get('start_time').split('T')[0] }} até {{ request.form.get('end_time').split('T')[0] }})
+                    {% else %}
+                        Total de Violações (Últimos 30 dias)
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- COR LARANJA -->
+        <div class="col-md-3">
+            <div class="stats-card card h-100" style="background-color:rgb(255, 255, 255);">
+                <div class="icon" style="color: #fd7e14;">
+                    <i class="fas fa-exclamation-circle" style="color: #fd7e14 !important;"></i>
+                </div>
+                <div class="number" style="color: #8a4b00;">{{ violations_count }}</div>
+                <div class="label text-dark">Total de Violações (Geral)</div>
+            </div>
+        </div>
+
+        <!-- COR ROXO -->
+        <div class="col-md-3">
+            <div class="stats-card card h-100" style="background-color:rgb(255, 255, 255);">
+                <div class="icon" style="color: #6f42c1;">
+                    <i class="fas fa-chart-pie" style="color: #6f42c1 !important;"></i>
+                </div>
+                <div class="number" style="color: #4b2875;">{{ "%.1f"|format(total_detections/violations_count*100) }}%</div>
+                <div class="label text-dark">
+                    {% if request.form.get('start_time') and request.form.get('end_time') %}
+                        % do Total no Período
+                    {% else %}
+                        % do Total nos Últimos 30 dias
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- COR VERDE -->
+        <div class="col-md-3">
+            <div class="stats-card card h-100" style="background-color:rgb(255, 255, 255);">
+                <div class="icon" style="color: #28a745;">
+                    <i class="fas fa-shield-alt" style="color: #28a745 !important;"></i>
+                </div>
+                <div class="number" style="color: #155724;">{{ most_common_epi }}</div>
+                <div class="label text-dark">EPI Mais Ausente</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos Principais -->
+    <div class="row g-4">
+        <!-- Gráfico de Tendência -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-line me-2"></i>
+                        {% if request.form.get('start_time') and request.form.get('end_time') %}
+                            Tendência de Violações ({{ request.form.get('start_time').split('T')[0] }} até {{ request.form.get('end_time').split('T')[0] }})
+                        {% else %}
+                            Tendência de Violações (Últimos 30 dias)
+                        {% endif %}
+                    </h5>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Distribuição por Tipo de EPI -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        {% if request.form.get('start_time') and request.form.get('end_time') %}
+                            Distribuição por Tipo de EPI ({{ request.form.get('start_time').split('T')[0] }} até {{ request.form.get('end_time').split('T')[0] }})
+                        {% else %}
+                            Distribuição por Tipo de EPI (Últimos 30 dias)
+                        {% endif %}
+                    </h5>
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparação Mensal -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-bar-chart  me-2"></i>Comparação Mensal
+                    </h5>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela de Resumo -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">
+                <i class="fas fa-table me-2"></i>
+                    {% if request.form.get('start_time') and request.form.get('end_time') %}
+                            Resumo por EPI ({{ request.form.get('start_time').split('T')[0] }} até {{ request.form.get('end_time').split('T')[0] }})
+                        {% else %}
+                            Resumo por EPI (Últimos 30 dias)
+                        {% endif %}
+            </h5>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>EPI</th>
+                            <th class="text-center">Total de Violações</th>
+                            <th class="text-center">% do Total</th>
+                            <th class="text-center">Tendência</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for epi in epi_summary %}
+                        <tr>
+                            <td>{{ epi.name }}</td>
+                            <td class="text-center">{{ epi.count }}</td>
+                            <td class="text-center">{{ epi.percentage }}%</td>
+                            <td class="text-center">
+                                {% if epi.trend > 0 %}
+                                    <span class="text-danger">
+                                        <i class="fas fa-arrow-up"></i> {{ epi.trend }}%
+                                    </span>
+                                {% elif epi.trend < 0 %}
+                                    <span class="text-success">
+                                        <i class="fas fa-arrow-down"></i> {{ epi.trend|abs }}%
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">
+                                        <i class="fas fa-minus"></i>
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Configurações comuns dos gráficos
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 20,
+                    boxWidth: 15,
+                    usePointStyle: true,
+                    font: {
+                        size: 12
+                    }
+                }
+            }
+        }
+    };
+
+    // Gráfico de Tendência
+    let trendData = {{ trend_data|safe }};
+    let trendChart = new Chart(document.getElementById('trendChart'), {
+        type: 'line',
+        data: trendData,
+        options: {
+            ...chartOptions,
+            scales: {
+                x: {
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45,
+                        autoSkip: true,
+                        maxTicksLimit: 10
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            },
+            plugins: {
+                ...chartOptions.plugins,
+                title: {
+                    display: false
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            }
+        }
+    });
+
+    // Gráfico de Pizza
+    let pieData = {{ pie_data|safe }};
+    let pieChart = new Chart(document.getElementById('pieChart'), {
+        type: 'doughnut',
+        data: {
+            labels: pieData.labels,
+            datasets: [{
+                data: pieData.data,
+                backgroundColor: [
+                    '#3b82f6',
+                    '#ef4444',
+                    '#10b981',
+                    '#f59e0b',
+                    '#6366f1',
+                    '#8b5cf6',
+                    '#ec4899'
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            ...chartOptions,
+            cutout: '60%',
+            plugins: {
+                ...chartOptions.plugins,
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${context.label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Gráfico Mensal
+    let monthlyData = {{ monthly_data|safe }};
+    let monthlyChart = new Chart(document.getElementById('monthlyChart'), {
+        type: 'bar',
+        data: monthlyData,
+        options: {
+            ...chartOptions,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Total: ${context.parsed.y} detecções`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                        callback: function(value) {
+                            if (value % 1 === 0) {
+                                return value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Manipulador do formulário de filtro
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch(window.location.pathname, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Atualizar o título do gráfico de tendência
+            const newTitle = doc.querySelector('#trendChart')
+                .closest('.card')
+                .querySelector('.card-title')
+                .innerHTML;
+            
+            document.querySelector('#trendChart')
+                .closest('.card')
+                .querySelector('.card-title')
+                .innerHTML = newTitle;
+
+            // Encontrar e parsear os dados dos gráficos
+            const scripts = Array.from(doc.scripts);
+            for (const script of scripts) {
+                const scriptContent = script.textContent;
+                
+                // Atualizar gráfico de tendência
+                if (scriptContent.includes('trendData = ')) {
+                    const match = scriptContent.match(/trendData\s*=\s*({[\s\S]*?});/);
+                    if (match) {
+                        try {
+                            const newData = JSON.parse(match[1]);
+                            trendChart.data = newData;
+                            trendChart.update();
+                        } catch (error) {
+                            console.error('Erro ao atualizar o gráfico de tendência:', error);
+                        }
+                    }
+                }
+                
+                // Atualizar gráfico de pizza
+                if (scriptContent.includes('pieData = ')) {
+                    const match = scriptContent.match(/pieData\s*=\s*({[\s\S]*?});/);
+                    if (match) {
+                        try {
+                            const newData = JSON.parse(match[1]);
+                            // Atualizar dados e rótulos
+                            pieChart.data.labels = newData.labels;
+                            pieChart.data.datasets[0].data = newData.data;
+                            // Forçar atualização do gráfico
+                            pieChart.update('none'); // 'none' desativa a animação para atualização instantânea
+
+                            // Atualizar o título do gráfico
+                            const pieChartTitle = doc.querySelector('#pieChart')
+                                .closest('.card')
+                                .querySelector('.card-title')
+                                .innerHTML;
+                            
+                            document.querySelector('#pieChart')
+                                .closest('.card')
+                                .querySelector('.card-title')
+                                .innerHTML = pieChartTitle;
+                        } catch (error) {
+                            console.error('Erro ao atualizar o gráfico de pizza:', error);
+                        }
+                    }
+                }
+                
+                // Atualizar gráfico mensal
+                if (scriptContent.includes('monthlyData = ')) {
+                    const match = scriptContent.match(/monthlyData\s*=\s*({[\s\S]*?});/);
+                    if (match) {
+                        try {
+                            const newData = JSON.parse(match[1]);
+                            monthlyChart.data = newData;
+                            monthlyChart.update();
+                        } catch (error) {
+                            console.error('Erro ao atualizar o gráfico mensal:', error);
+                        }
+                    }
+                }
+            }
+            
+            // Atualizar os cards de estatísticas
+            const statsCards = doc.querySelectorAll('.stats-card');
+            document.querySelectorAll('.stats-card').forEach((card, index) => {
+                const newCard = statsCards[index];
+                const newNumber = newCard.querySelector('.number').textContent;
+                const newLabel = newCard.querySelector('.label').textContent;
+                
+                card.querySelector('.number').textContent = newNumber;
+                card.querySelector('.label').textContent = newLabel;
+            });
+
+            // Atualizar a tabela de Resumo por EPI
+            const newTable = doc.querySelector('.table');
+            const currentTable = document.querySelector('.table');
+            if (newTable && currentTable) {
+                currentTable.querySelector('tbody').innerHTML = newTable.querySelector('tbody').innerHTML;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+{% endblock %}

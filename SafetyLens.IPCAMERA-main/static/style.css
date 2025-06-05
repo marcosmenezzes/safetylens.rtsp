@@ -1,0 +1,688 @@
+:root {
+    --primary-color: rgba(4, 93, 148, 0.85);
+    --secondary-color: rgba(4, 93, 148, 0.9);
+    --accent-color: #7faf37;
+    --danger-color: #dc2626;
+    --background-color: #ffffff;
+    --card-background: #ffffff;
+    --sidebar-width: 250px;
+    --sidebar-bg: #f9f9f9;
+    --sidebar-text: #045d94da;
+}
+
+body {
+    background-color: var(--background-color);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Estilos globais para ícones */
+.fas,
+.fab,
+.far,
+.fa {
+    color: #f9f9f9 !important;
+    font-weight: bold;
+}
+
+.text-primary,
+.text-primary i {
+    color: #045d94d5 !important;
+}
+
+/* Header styles */
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+header p {
+    opacity: 0.9;
+    margin-top: 0.5rem;
+}
+
+/* Estilos do container principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    flex: 1; /* Permite que o container cresça e preencha o espaço restante */
+}
+
+/* Estilos dos cards (caixas de informação) */
+.card {
+    background: var(--card-background);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeIn 0.3s ease-out;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+}
+
+/* Estilos do corpo dos cards */
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Estilos do título dos cards */
+.card-title {
+    color: #1f2937;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.card-title i {
+    color: #0198FF !important;
+}
+
+/* Estilos do texto dos cards */
+.card-text {
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Estilos para as linhas (flexbox) */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+    justify-content: center; /* Centraliza as linhas */
+}
+
+/* Estilos para as colunas (flexbox) */
+/* Removendo as classes col-md-3 e col-md-6 específicas para flexbox, usaremos classes do Bootstrap diretamente */
+
+/* Estilos dos formulários (inline) */
+.form-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* Estilos dos grupos de formulário */
+.form-group {
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+/* Estilos dos campos de formulário */
+.form-control {
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+/* Estilos dos botões */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    color: #fff; /* Define a cor do texto para branco */
+}
+
+/* Estilos dos botões primários */
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Estilos dos botões secundários */
+.btn-secondary {
+    background-color: #64748b;
+    border: none;
+}
+
+/* Estilos das tabelas */
+table {
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Estilos dos cabeçalhos e células da tabela */
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Estilos do cabeçalho da tabela */
+th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* Estilos da paginação */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 20px 0; /* Adiciona margem acima e abaixo da paginação */
+    padding: 0;
+    gap: 0.25rem;
+}
+
+/* Estilos dos itens da paginação */
+.pagination li {
+    margin: 0 5px;
+}
+
+/* Estilos dos links da paginação */
+.pagination a {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    padding: 8px 12px;
+    text-decoration: none;
+}
+
+.pagination .page-link {
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--primary-color);
+    border: 1px solid #e2e8f0;
+}
+
+/* Estilos ao passar o mouse nos links da paginação */
+.pagination a:hover {
+    background-color: #f2f2f2;
+}
+
+/* Estilos dos itens de paginação ativos */
+.pagination li.active a {
+    background-color: #045C94;
+    border-color: #045C94;
+    color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Estilos dos canvas */
+canvas {
+    height: auto;
+    max-width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Stats display */
+.display-6 {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Chart containers */
+#barChartContainer,
+#lineChartContainer {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    header {
+        padding: 1.5rem 0;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animation for data updates */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Layout Base */
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+/* Sidebar */
+.sidebar {
+    min-width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    transition: all 0.3s;
+    min-height: 100vh;
+    position: fixed;
+    z-index: 100;
+}
+
+.sidebar.active {
+    margin-left: calc(-1 * var(--sidebar-width));
+}
+
+.sidebar .sidebar-header {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar ul li a {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    display: block;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li.active > a {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--accent-color);
+}
+
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(167, 167, 167, 0.11);
+}
+
+/* Content Area */
+#content {
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    transition: all 0.3s;
+    position: absolute;
+    right: 0;
+    background: var(--background-color);
+}
+
+#content.active {
+    width: 100%;
+}
+
+/* Stats Cards */
+.stats-card {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.stats-card .icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #045d94d5;
+}
+
+.stats-card .icon i,
+.card-title i {
+    color: #045d94d5 !important;
+}
+
+.stats-card .text-warning,
+.stats-card .text-success {
+    color: #045d94d5 !important;
+}
+
+.stats-card .number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stats-card .label {
+    color: #64748b;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Charts */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin: 1rem 0;
+}
+
+/* Tables */
+.table-container {
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: #f8fafc;
+    border-bottom: 2px solid #e2e8f0;
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* Forms */
+.form-control {
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Pagination */
+.pagination {
+    margin: 2rem 0;
+    justify-content: center;
+}
+
+.pagination .page-link {
+    border-radius: 0.5rem;
+    margin: 0 0.25rem;
+    color: var(--primary-color);
+    border: 1px solid #e2e8f0;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+    }
+    
+    .sidebar.active {
+        margin-left: 0;
+    }
+    
+    #content {
+        width: 100%;
+    }
+    
+    #content.active {
+        width: calc(100% - var(--sidebar-width));
+    }
+    
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Estilos da Equipe */
+.team-section {
+    padding: 2rem 0;
+}
+
+.team-member {
+    background: var(--card-background);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.team-member:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.member-img-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+/* Estilo Hexagonal */
+.hexagon {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-color);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    transition: all 0.3s ease;
+}
+
+.hexagon-inner {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    background: var(--card-background);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hexagon-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.team-member:hover .hexagon {
+    transform: rotate(360deg);
+}
+
+.member-name {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.member-role {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.social-links a {
+    text-decoration: none;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--accent-color) !important;
+    transform: translateY(-2px);
+}
+
+/* Novos Estilos */
+.feature-card {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: white;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    min-width: 50px;
+    color: #045d94d5;
+}
+
+.tech-card {
+    background: white;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.tech-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card {
+    background: white;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card .display-4 {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.roadmap-item {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: white;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.roadmap-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.challenge-section, .solution-section {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    height: 100%;
+}
+
+.challenge-section {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.solution-section {
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.member-desc {
+    color: #64748b;
+    margin-bottom: 1rem;
+}
+
+/* Ajustes Responsivos */
+@media (max-width: 768px) {
+    .feature-card, .tech-card, .metric-card, .roadmap-item {
+        margin-bottom: 1rem;
+    }
+}
