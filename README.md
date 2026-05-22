@@ -1,90 +1,82 @@
-# Safety Lens - Sistema de Monitoramento de EPIs com IA
+# 🦺 Safety Lens - AI-Based PPE Monitoring System
 
-## Descrição do Projeto
+## Project Description
 
-O **Safety Lens** é um sistema avançado de monitoramento de Equipamentos de Proteção Individual (EPIs) que utiliza inteligência artificial para identificação em tempo real. O sistema é composto por dois módulos principais que trabalham em conjunto:
+**Safety Lens** is an advanced Personal Protective Equipment (PPE) monitoring system that uses artificial intelligence for real-time identification. The system is composed of two main modules working together:
 
-1. **App Principal** (#app-principal.py): Responsável pela detecção em tempo real
-2. **Servidor Web** (#servidor-web-site.py): Interface web para visualização e análise dos dados
+1. **Main Application** (`#app-principal.py`): Responsible for real-time detection  
+2. **Web Server** (`#servidor-web-site.py`): Web interface for visualization and data analysis
 
-## Estrutura do Projeto
+---
 
-```
+## 📁 Project Structure
+
+```text
 SafetyLens-main/
-├── #app-principal.py         # Aplicação principal de detecção
-├── #servidor-web-site.py     # Servidor web Flask
-├── #start-app-principal.bat  # Script para iniciar app principal
-├── #start-servidor-web-site.bat # Script para iniciar servidor web
-├── config.yaml              # Arquivo de configuração do sistema
-├── requirements.txt         # Dependências do projeto
+├── #app-principal.py              # Main detection application
+├── #servidor-web-site.py          # Flask web server
+├── #start-app-principal.bat       # Script to start the main app
+├── #start-servidor-web-site.bat   # Script to start the web server
+├── config.yaml                    # System configuration file
+├── requirements.txt               # Project dependencies
 ├── database/
-│   └── epi_detections.db    # Banco de dados SQLite
+│   └── epi_detections.db          # SQLite database
 ├── model/
-│   └── best.pt             # Modelo YOLO treinado
+│   └── best.pt                    # Trained YOLO model
 ├── static/
-│   └── style.css           # Estilos da interface web
+│   └── style.css                  # Web interface styles
 └── templates/
-    └── index.html          # Template da página web
-```
+    └── index.html                 # Web page template
+🚀 Features
+1. PPE Detection (Main Application)
+Real-time detection using YOLO v8
+Identification of multiple PPE types:
+Safety glasses
+Helmet
+Gloves
+Ear protection
+Tkinter graphical interface for configuration
+Configurable visual and sound alert system
+2. Web Interface (Web Server)
+Real-time detection visualization
+Date/time filtering
+Statistical charts:
+Distribution by PPE type
+Detection timeline
+Captured image visualization
+Real-time updates via WebSocket
+🗄️ Database
 
-## Funcionalidades
+The system uses SQLite with the following structure:
 
-### 1. Detecção de EPIs (App Principal)
-- Detecção em tempo real usando modelo YOLO v8
-- Identificação de múltiplos EPIs:
-  - Óculos de proteção
-  - Capacete
-  - Luvas
-  - Abafador
-- Interface gráfica com Tkinter para configurações
-- Sistema de alertas visuais e sonoros configuráveis
-
-### 2. Interface Web (Servidor Web)
-- Visualização de detecções em tempo real
-- Filtragem por data/hora
-- Gráficos estatísticos:
-  - Distribuição por tipo de EPI
-  - Evolução temporal das detecções
-- Visualização de imagens capturadas
-- Atualização em tempo real via WebSocket
-
-## Banco de Dados
-
-O sistema utiliza SQLite com a seguinte estrutura:
-
-### Tabelas
-
-1. **epis**
-   - id (INTEGER PRIMARY KEY)
-   - nome (TEXT NOT NULL UNIQUE)
-
-2. **detections**
-   - id (INTEGER PRIMARY KEY)
-   - timestamp (TEXT NOT NULL)
-   - frame_data (BLOB)
-   - epi_id (INTEGER, FOREIGN KEY)
-
-3. **settings**
-   - id (INTEGER PRIMARY KEY)
-   - camera_resolution_w (INTEGER)
-   - camera_resolution_h (INTEGER)
-   - brightness_value (INTEGER)
-   - contrast_value (INTEGER)
-   - sharpness_value (INTEGER)
-   - grayscale_value (INTEGER)
-   - min_confidence_value (REAL)
-   - alert_frequency_value (INTEGER)
-   - alert_duration_value (INTEGER)
-   - delay_time_value (INTEGER)
-   - selected_epi_classes (TEXT)
-
-## Configuração (config.yaml)
-
-```yaml
+Tables
+1. epis
+id (INTEGER PRIMARY KEY)
+nome (TEXT NOT NULL UNIQUE)
+2. detections
+id (INTEGER PRIMARY KEY)
+timestamp (TEXT NOT NULL)
+frame_data (BLOB)
+epi_id (INTEGER, FOREIGN KEY)
+3. settings
+id (INTEGER PRIMARY KEY)
+camera_resolution_w (INTEGER)
+camera_resolution_h (INTEGER)
+brightness_value (INTEGER)
+contrast_value (INTEGER)
+sharpness_value (INTEGER)
+grayscale_value (INTEGER)
+min_confidence_value (REAL)
+alert_frequency_value (INTEGER)
+alert_duration_value (INTEGER)
+delay_time_value (INTEGER)
+selected_epi_classes (TEXT)
+⚙️ Configuration (config.yaml)
 alerts:
   delay_time: 10
   duration: 500
   frequency: 1000
+
 camera:
   default_settings:
     brightness: 87
@@ -95,70 +87,57 @@ camera:
   resolution:
     height: 720
     width: 1280
+
 detection:
   classes:
     epi_ausentes:
-    - 4  # Sem óculos
-    - 5  # Sem capacete
-    - 6  # Sem luva
-    - 7  # Sem abafador
+      - 4  # Without safety glasses
+      - 5  # Without helmet
+      - 6  # Without gloves
+      - 7  # Without ear protection
+
     epi_presentes:
-    - 1  # Com óculos
-    - 2  # Com capacete
-    - 3  # Com luva
+      - 1  # With safety glasses
+      - 2  # With helmet
+      - 3  # With gloves
+
   min_confidence: 0.8
+
 paths:
   database: database/epi_detections.db
   model: model/best.pt
-```
-
-## Instalação
-
-1. Clone o repositório
-2. Instale as dependências:
-```bash
+💾 Installation
+Clone the repository
+Install the dependencies:
 pip install -r requirements.txt
-```
-
-## Como Executar
-
-1. Inicie o App Principal:
-```bash
+▶️ How to Run
+1. Start the Main Application
 #start-app-principal.bat
-```
-ou
-```bash
+
+or
+
 python #app-principal.py
-```
-
-2. Inicie o Servidor Web:
-```bash
+2. Start the Web Server
 #start-servidor-web-site.bat
-```
-ou
-```bash
+
+or
+
 python #servidor-web-site.py
-```
+3. Access the Web Interface
+http://localhost:5000
+📦 Main Dependencies
+opencv-python
+ultralytics (YOLO)
+numpy
+Pillow
+flask
+pyyaml
+tkinter
+💻 System Requirements
+Python 3.8+
+Webcam or USB camera
+Windows (for sound alerts using winsound)
+Recommended: 4GB+ RAM
+📄 License
 
-3. Acesse a interface web em: http://localhost:5000
-
-## Dependências Principais
-
-- opencv-python
-- ultralytics (YOLO)
-- numpy
-- Pillow
-- flask
-- pyyaml
-- tkinter
-
-## Requisitos de Sistema
-
-- Python 3.8+
-- Webcam ou câmera USB
-- Windows (para alertas sonoros via winsound)
-- 4GB+ RAM recomendado
-
-## Licença
-
-Este projeto está sob a licença MIT.
+This project is licensed under the MIT License.
