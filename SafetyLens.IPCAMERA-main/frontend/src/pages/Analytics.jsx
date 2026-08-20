@@ -11,6 +11,14 @@ export default function Analytics() {
   const path = useMemo(() => `/api/analytics?${buildQuery(filters)}`, [filters])
   const { data, error, loading, retry } = useApi(path)
   const top = data?.byEpi[0]
+  const riskColors = ['var(--chart-primary)', 'var(--chart-secondary)', 'var(--expressive-purple)', 'var(--jade)']
+  let riskOffset = 0
+  const riskSegments = data?.byEpi.map((item, index) => {
+    const start = riskOffset
+    riskOffset = Math.min(100, riskOffset + item.percentage)
+    return `${riskColors[index % riskColors.length]} ${start}% ${riskOffset}%`
+  }) || []
+  if (riskOffset < 100) riskSegments.push(`var(--grid) ${riskOffset}% 100%`)
 
   return (
     <div className="analytics-page">
@@ -25,7 +33,7 @@ export default function Analytics() {
           <div className="dot-divider" />
           <section className="analytics-overview">
             <div className="analytics-trend"><header><h3>Evolução das ocorrências</h3><span>período selecionado</span></header><LineChart title="Tendência diária" data={data.trend} /></div>
-            <aside className="risk-distribution"><h3>Distribuição de risco</h3><div className="risk-ring" style={{ '--share': `${top?.percentage || 0}%` }}><div><small>MAIOR ÍNDICE</small><strong>{top?.percentage || 0}%</strong></div></div><ul>{data.byEpi.slice(0, 3).map((item) => <li key={item.name}><i /><span>{item.name.replaceAll('_', ' ')}</span><strong>{item.count}</strong></li>)}</ul></aside>
+            <aside className="risk-distribution"><h3>Distribuição de risco</h3><div className="risk-ring" style={{ '--risk-gradient': `conic-gradient(${riskSegments.join(', ')})` }}><div><small>MAIOR ÍNDICE</small><strong>{top?.percentage || 0}%</strong></div></div><ul>{data.byEpi.map((item, index) => <li key={item.name}><i style={{ background: riskColors[index % riskColors.length] }} /><span>{item.name.replaceAll('_', ' ')}</span><strong>{item.count}</strong></li>)}</ul></aside>
           </section>
 
           <div className="dot-divider" />

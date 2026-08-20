@@ -18,7 +18,7 @@ export default function Detections() {
   }
 
   return (
-    <>
+    <div className="detections-page">
       <section className="section-intro"><div><span className="eyebrow">RASTREABILIDADE</span><h2>Cada alerta, uma evidência.</h2></div><p>Filtre o período e consulte as capturas associadas às ocorrências detectadas pelo modelo.</p></section>
       <DateRangeFilter initial={filters} onApply={apply} />
       <section className="panel section-panel">
@@ -32,6 +32,6 @@ export default function Detections() {
           </nav>
         )}
       </section>
-    </>
+    </div>
   )
 }

@@ -19,14 +19,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-::selection { background: var(--text); color: var(--ink); }
+::selection { background: var(--expressive-lime); color: var(--expressive-ink); }
 
 a { color: inherit; }
 button, input { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 img { display: block; max-width: 100%; }
 
-:focus-visible { outline: 2px solid var(--quartz); outline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--expressive-lime); outline-offset: 3px; }
 
 .sr-only {
   position: absolute;

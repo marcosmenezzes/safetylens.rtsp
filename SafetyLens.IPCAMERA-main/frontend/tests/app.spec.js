@@ -73,6 +73,15 @@ test('dashboard apresenta métricas e evento recente', async ({ page }) => {
   await expect(page.getByRole('link', { name: /Ver histórico completo/ })).toHaveAttribute('href', '/detections')
 })
 
+test('gráfico de risco usa as mesmas cores da legenda', async ({ page }) => {
+  await page.goto('/analytics')
+  const ringBackground = await page.locator('.risk-ring').evaluate((element) => getComputedStyle(element).backgroundImage)
+  const markerColors = await page.locator('.risk-distribution li i').evaluateAll((markers) => markers.map((marker) => getComputedStyle(marker).backgroundColor))
+  expect(markerColors).toHaveLength(3)
+  expect(new Set(markerColors).size).toBe(3)
+  markerColors.forEach((color) => expect(ringBackground).toContain(color))
+})
+
 test('tema escuro é padrão e a preferência persiste', async ({ page }) => {
   await page.goto('/')
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
