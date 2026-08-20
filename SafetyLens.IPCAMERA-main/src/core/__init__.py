@@ -1,3 +1,1 @@
-"""
-Core modules for SafetyLens application
-"""
+"""Regras independentes de interface: configuração, inferência e persistência."""

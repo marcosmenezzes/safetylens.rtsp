@@ -1,0 +1,67 @@
+:root {
+  color-scheme: dark;
+  --ink: #050505;
+  --surface: #090909;
+  --surface-raised: #151515;
+  --grid: #242424;
+  --border: #343434;
+  --text: #f5f5f0;
+  --muted: #a2a29c;
+  --quartz: #ffffff;
+  --violet: #d4d4cf;
+  --jade: #65c6a7;
+  --citrine: #e2bc55;
+  --danger: #f06d72;
+  --chart-primary: #d7a7ff;
+  --chart-secondary: #fff07a;
+  --chart-container: #24152c;
+  --glass: rgba(5, 5, 5, .94);
+  --panel: #090909;
+  --hero-from: #151515;
+  --hero-to: #050505;
+  --about-from: #f3f3ef;
+  --about-to: #d8d8d2;
+  --grid-line: rgba(255, 255, 255, .035);
+  --glow: rgba(255, 255, 255, .08);
+  --risk-text: #f1d985;
+  --status-text: #8bd7bf;
+  --max-width: 1360px;
+  --radius-xs: 6px;
+  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --display: "Roboto Flex", ui-sans-serif, system-ui, sans-serif;
+  --mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --serif: "Roboto Flex", ui-sans-serif, system-ui, sans-serif;
+  --sans: "Roboto Flex", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ink: #f4f4f0;
+  --surface: #ffffff;
+  --surface-raised: #e9e9e4;
+  --grid: #ddddda;
+  --border: #c9c9c4;
+  --text: #050505;
+  --muted: #65655f;
+  --quartz: #050505;
+  --violet: #343434;
+  --jade: #147455;
+  --citrine: #876400;
+  --danger: #b53f49;
+  --chart-primary: #7136a8;
+  --chart-secondary: #765b00;
+  --chart-container: #f1e6f7;
+  --glass: rgba(244, 244, 240, .94);
+  --panel: #ffffff;
+  --hero-from: #ffffff;
+  --hero-to: #e5e5df;
+  --about-from: #111111;
+  --about-to: #282828;
+  --grid-line: rgba(0, 0, 0, .04);
+  --glow: rgba(0, 0, 0, .08);
+  --risk-text: #70530d;
+  --status-text: #216854;
+}

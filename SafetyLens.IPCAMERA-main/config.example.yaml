@@ -1,0 +1,26 @@
+# Copie este arquivo para config.yaml antes da primeira execução.
+alerts:
+  # Intervalo mínimo, em segundos, entre capturas salvas.
+  delay_time: 30
+
+camera:
+  active_name: Câmera nativa
+  default_settings:
+    brightness: 100
+    contrast: 100
+    grayscale: false
+    sharpness: 0
+  # Índice zero normalmente representa a webcam principal.
+  id: 0
+  registered: []
+  resolution:
+    width: 1920
+    height: 1080
+  url: null
+
+detection:
+  min_confidence: 0.52
+
+paths:
+  database: detections.db
+  model: model/best.pt

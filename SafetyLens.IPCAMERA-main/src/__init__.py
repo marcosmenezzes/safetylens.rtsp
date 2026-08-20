@@ -1,3 +1,1 @@
-"""
-SafetyLens - Sistema de Detecção de EPIs
-"""
+"""Pacote principal do sistema de detecção de EPIs SafetyLens."""
